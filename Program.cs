@@ -1,5 +1,11 @@
+using HotelApi.Data;
+using HotelApi.Interfaces;
+using HotelApi.Profiles;
+using HotelApi.Repository;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+
 //configure logging
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
@@ -14,10 +20,22 @@ var builder = WebApplication.CreateBuilder(args);
 //use serilog 
 builder.Host.UseSerilog();
 
+//add dbcontext
+builder.Services.AddDbContext<HotelDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HotelConnectionString"));
+});
+
+//add mapping profile
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+//add unitofwork
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(
+    opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

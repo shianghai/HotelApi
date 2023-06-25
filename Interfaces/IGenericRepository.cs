@@ -12,7 +12,7 @@ namespace HotelApi.Interfaces
         );
 
         Task<IList<T>> GetAll(
-            Expression<Func<T, bool>> expression,
+            Expression<Func<T, bool>> expression = null,
             List<string> includes = null
             );
 

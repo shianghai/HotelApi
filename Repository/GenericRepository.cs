@@ -52,7 +52,7 @@ namespace HotelApi.Repository
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression, List<string> includes = null)
+        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, List<string> includes = null)
         {
             IQueryable<T> query = _db;
             if (includes != null)
