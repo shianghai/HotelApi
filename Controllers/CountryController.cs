@@ -1,4 +1,5 @@
-﻿using HotelApi.Interfaces;
+﻿using HotelApi.Data;
+using HotelApi.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,21 @@ namespace HotelApi.Controllers
             catch (Exception exception)
             {
                 _logger.Log(LogLevel.Error, exception, $"something went wrong in {nameof(GetAllCountries)}");
+                return StatusCode(500, "An error occured. Please try again later");
+            }
+        }
+
+        [HttpGet("by/id/{id}:int")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var country = await _unitOfWork.CountryRepository.Get(c => c.Id == id);
+                return Ok(country);
+            }
+            catch (Exception exception)
+            {
+                _logger.Log(LogLevel.Error, exception, $"something went wrong in {nameof(GetById)}");
                 return StatusCode(500, "An error occured. Please try again later");
             }
         }
