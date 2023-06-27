@@ -1,4 +1,5 @@
 using HotelApi.Data;
+using HotelApi.Extensions;
 using HotelApi.Interfaces;
 using HotelApi.Profiles;
 using HotelApi.Repository;
@@ -32,6 +33,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 //add unitofwork
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+//authentication
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
+
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson(
@@ -60,6 +66,9 @@ if (app.Environment.IsDevelopment())
 
     //use cor policy
     app.UseCors("AllowAll");
+
+    app.UseAuthentication();
+    app.UseAuthentication();
     
 }
 

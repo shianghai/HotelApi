@@ -14,6 +14,10 @@ namespace HotelApi.Profiles
 
             CreateMap<Hotel, HotelReadDto>();
             CreateMap<HotelWriteDto, HotelReadDto>();
+
+            CreateMap<UserWriteDto, ApiUser>().ReverseMap();
+
+            CreateMap<LoginWriteDto, ApiUser>().ReverseMap();
         }
     }
 }

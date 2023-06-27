@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HotelApi.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelApi.Data
 {
-    public class HotelDbContext: DbContext
+    public class HotelDbContext : IdentityDbContext
     {
         public HotelDbContext(DbContextOptions options): base(options)
         {
-            
+           
         }
         public DbSet<Country>  Countries {get; set;}
 
@@ -15,6 +17,8 @@ namespace HotelApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<Country>().HasData(
                 new Country()
                 {
