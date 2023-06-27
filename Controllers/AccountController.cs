@@ -9,7 +9,7 @@ using System;
 
 namespace HotelApi.Controllers
 {
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController :ControllerBase
     {
@@ -32,7 +32,7 @@ namespace HotelApi.Controllers
             _authManager = authManager;
         }
 
-        [HttpPost("Login", Name = "Register")]
+        [HttpPost("Register", Name = "Register")]
         public async Task<IActionResult> Register([FromBody] UserWriteDto userWriteDto)
         {
             var user = _mapper.Map<ApiUser>(userWriteDto);
@@ -62,7 +62,10 @@ namespace HotelApi.Controllers
             }
         }
 
-        [HttpPost("register", Name = "Login")]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPost("Login", Name = "Login")]
         public async Task<IActionResult> Login([FromBody] LoginWriteDto loginInfo)
         {
 
@@ -72,24 +75,15 @@ namespace HotelApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
+             var isUserValidated = await _authManager.AuthenticateUserAsync(loginInfo);
+            if (isUserValidated)
             {
-                var isUserValidated = await _authManager.AuthenticateUserAsync(loginInfo);
-                if (isUserValidated)
-                {
-                    var token = await _authManager.GenerateTokenAsync();
-                    return Accepted(new {Token = token});
-
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                var token = await _authManager.GenerateTokenAsync(loginInfo.UserName);
+                return Accepted(new {Token = token});
             }
-            catch (Exception ex)
+            else
             {
-                _logger.Log(LogLevel.Error, ex, $"something went wrong in {nameof(Register)}");
-                return StatusCode(500, "An error occured. Please try again later");
+                return Unauthorized();
             }
         }
     }

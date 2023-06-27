@@ -3,6 +3,7 @@ using HotelApi.Extensions;
 using HotelApi.Interfaces;
 using HotelApi.Profiles;
 using HotelApi.Repository;
+using HotelApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -32,6 +33,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 //add unitofwork
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ApiUser>();
+
+//auth manager
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 
 //authentication
 builder.Services.AddAuthentication();
@@ -69,7 +74,8 @@ if (app.Environment.IsDevelopment())
 
     app.UseAuthentication();
     app.UseAuthentication();
-    
+
+    app.ConfigureExceptionHandling();
 }
 
 app.UseHttpsRedirection();

@@ -6,6 +6,6 @@ namespace HotelApi.Interfaces
     {
         Task<bool> AuthenticateUserAsync(LoginWriteDto loginInfo);
 
-        Task<string> GenerateTokenAsync();
+        Task<string> GenerateTokenAsync(string userName);
     }
 }

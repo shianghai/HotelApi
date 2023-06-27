@@ -12,7 +12,7 @@ namespace HotelApi.Profiles
             CreateMap<Country, CountryReadDto>().ReverseMap();
             CreateMap<CountryWriteDto, Country>().ReverseMap();
 
-            CreateMap<Hotel, HotelReadDto>();
+            CreateMap<Hotel, HotelReadDto>().ReverseMap();
             CreateMap<HotelWriteDto, HotelReadDto>();
 
             CreateMap<UserWriteDto, ApiUser>().ReverseMap();
