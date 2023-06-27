@@ -14,6 +14,8 @@ namespace HotelApi.Data
 
         public DbSet<Hotel> Hotels { get; set;}
 
+        public DbSet<ApiUser> ApiUsers { get; set;}
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
